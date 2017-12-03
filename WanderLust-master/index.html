@@ -1,0 +1,244 @@
+<!doctype html>
+<html>
+  <head>
+
+    <!-- Meta Tags -->
+    <meta charset="UTF-8">
+    <meta name="author" content="Team STA">
+    <meta name="description" content="Website created for LUC COMP424 Fall 2016"
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+    <meta name="date" content="2016">
+
+    <!-- imports for the stylesheet and fonts -->
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Lato">
+    <link rel="stylesheet" type="text/css" href="assets/styles/style.css">
+    <title>Wanderlust</title>
+  </head>
+
+  <body>
+    <!-- Title and Nav Bar -->
+    <header>
+      <a class="link title" href="index.html">Wanderlust</a>
+      <ul>
+        <li><a class="button" type="button" onclick="callTransition('#searchform')">Explore</a></li>
+        <li><a class="button non" type="button" onclick="callTransition('#loginform')">Log In</a></li>
+        <li><a class="button non" type="button"onclick="callTransition('#signupform')">Sign Up</a></li>
+        <li><a class="button user" type="button" onclick="callTransition('#saved')">Searches</a></li>
+        <li><a class="button user" type="button" onclick="callTransition('#account')">Account</a></li>
+        <li><a class="button user" type="button" onclick="logout()">Logout</a></li>
+      </ul>
+    </header>
+
+    <!-- all the main content is stored here -->
+    <main>
+
+      <!-- spinner div placeholder -->
+      <div id="spinner"></div>
+
+      <!-- Banner headers for incorrect entries -->
+      <h4 id="incorrect">Incorrect Email or Password</h4>
+      <h4 id="badPass">Passwords Do Not Match</h4>
+      <h4 id="update">Update Successful</h4>
+      <h4 id="badEmail">Please enter your email</h4>
+      <h4 id="emailSent">A reset email has been sent.</h4>
+      <h4 id="badDelete">Incorrect Password.</h4>
+
+      <!-- This is the about information, default hidden -->
+      <section id="about" style="text-align: center;">
+        <h3>Team Members</h3>
+        Asmina Akram
+        <br />
+        Sudeshna Bhattacharyya
+        <br />
+        Thaddeus Krawczyk
+        <h5>Created for Loyola University Chicago COMP424 Fall 2016</h5>
+      </section>
+
+      <!-- Landing page -->
+      <section id="landing">
+        <h2>Welcome to <span>your</span> next <span>adventure!</span></h2>
+        <p>
+          Find your next adventure with us.<br />
+          Search for new and exciting places to visit.<br />
+          Sign up to track your recent searches.<br />
+          Happy travels!
+        </p>
+        <input class="button" type="button" onclick="callTransition('#searchform')" value="Get Started!">
+      </section>
+
+      <!-- This search form contains the Google Search Bar listener -->
+      <form id="searchform">
+        <h2>Where do <span>you</span> want to <span>explore</span>?</h2>
+        <input id="search" type="text" placeholder="Search for your adventure..." autofocus>
+      </form>
+
+      <!--- This page is for the account actions -->
+      <section id="account" style="text-align:center">
+        <h2>Account Actions</h2>
+        <section id="accountbuttons">
+          <input class="button" type="button" onclick="callTransition('#emailform')" value="Change Email"><br />
+          <input class="button" type="button" onclick="callTransition('#passwordform')" value="Change Password"><br />
+          <input class="button" type="button" onclick="callTransition('#deleteform')" value="Delete Account">
+        </section>
+      </section>
+
+      <!-- This signup page is hidden by default -->
+      <form id="signupform" onsubmit="return signup()">
+        <h2>Sign Up</h2>
+        <label>Email</label>
+        <br />
+        <input type="email" id="email" required>
+        <br />
+        <label>Password</label>
+        <br />
+        <input type="password" id="password" required>
+        <br />
+        <label>Confirm Password</label>
+        <br />
+        <input type="password" id="confirm" required>
+        <br />
+        <input class="submit" type="submit" value="Sign up">
+      </form>
+
+      <!-- This login page is hidden by default -->
+      <form id="loginform" onsubmit="return login()">
+        <h2>Log In</h2>
+        <label>Email</label><br />
+        <input type="email" id="loginEmail" required>
+        <br />
+        <label>Password</label><br />
+        <input type="password" id="loginPassword" required>
+        <br />
+        <input class="submit" type="submit" value="Log in">
+        <br />
+        <input class="submit" type="button" onclick="resetPassword()" value="Forgot Password?">
+      </form>
+
+      <!-- delete account form hidden by default -->
+      <form id="deleteform" onsubmit="return deleteAccount()">
+        <h2>Delete Account</h2>
+        <h4>Enter your password below to delete your account.</h4>
+        <label>Password</label>
+        <br />
+        <input type="password" id="passworddelete" required>
+        <br />
+        <input class="submit" type="submit" value="Delete">
+      </form>
+
+      <!-- change email form by default -->
+      <form id="emailform" onsubmit="return changeEmail()">
+        <h2>Change Email</h2>
+        <label>New Email</label>
+        <br />
+        <input type="email" id="newemail" required>
+        <br />
+        <label>Password</label>
+        <br />
+        <input type="password" id="passwordemail" required>
+        <br />
+        <input class="submit" type="submit" value="Change Email">
+      </form>
+
+      <!-- change password form hidden by default -->
+      <form id="passwordform" onsubmit="return changePassword()">
+        <h2>Change Password</h2>
+        <label>Current Password</label>
+        <br />
+        <input type="password" id="oldpassword" required>
+        <br />
+        <label>New Password</label>
+        <br />
+        <input type="password" id="newpassword" required>
+        <br />
+        <label>Confirm Password</label>
+        <br />
+        <input type="password" id="confirmpassword" required>
+        <br />
+        <input class="submit" type="submit" value="Change Password">
+      </form>
+
+      <!-- this section is used to show saved or recent searches for users -->
+      <section id="saved">
+        <article id="recentsearch">
+          <h2>Recent Searches</h2>
+          <h4>Your 10 most recent searches are saved here.</h4>
+        </article>
+      </section>
+
+      <!-- Placeholder for Google Map, created when search is conducted -->
+       <div id="map"></div>
+
+       <!-- section to contain the weather and places windows -->
+      <section id="blocks">
+        <!-- PLace for weather window -->
+        <section class="infoblock">
+          <h4>Local Weather</h4>
+          <section id="weather">
+            <div id="current"></div>
+            <div id="country"></div>
+            <div id="temp"></div>
+            <div id="feels"></div>
+            <div id="wind"></div>
+          </section>
+        </section>
+
+        <!-- section for places data -->
+        <section class="infoblock">
+          <h4>Local Places</h4>
+          <section id="place">
+            Name: Loyola University Chicago - Water Tower Campus<br />
+            Address: 111 E Pearson St, Chicago, IL 60611<br />
+          </section>
+        </section>
+      </section>
+    </main>
+
+    <!-- Footer contains API branding and About link -->
+    <footer>
+      <h5>To Travel is to Live</h5>
+      <h6><a class="link" onclick="callTransition('#about')">About Us</a></h6>
+      <a href="http://www.google.com">
+        <img src="assets/images/powered_by_google_on_white.png" alt="Google"></a>
+      <a href="http://www.wunderground.com">
+        <img src="assets/images/wundergroundLogo_4c.png" alt="Wunderground" style="width: 107px;"></a>
+    </footer>
+
+    <!-- All scripts loaded here -->
+    <script src="https://www.gstatic.com/firebasejs/3.5.2/firebase.js"></script>
+    <script type="text/javascript">
+      // Firebase keys
+      var config = {
+        apiKey: "AIzaSyBI1VLNGq-3uTrHiou_Z-GWhaEdYzRiUSI",
+        authDomain: "wanderlust-comp424-55b1d.firebaseapp.com",
+        databaseURL: "https://wanderlust-comp424-55b1d.firebaseio.com",
+        storageBucket: "wanderlust-comp424-55b1d.appspot.com",
+        messagingSenderId: "232051610731"
+      };
+      firebase.initializeApp(config);
+    </script>
+
+    <!-- requires jQuery to work, also needs Google API and spin.js -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="http://spin.js.org/spin.min.js"></script>
+    <script src="http://spin.js.org/jquery.spin.js"></script>
+    <script type="text/javascript" src="assets/scripts/user.js"></script>
+    <script type="text/javascript" src="assets/scripts/transitions.js"></script>
+    <script type="text/javascript" src="assets/scripts/database.js"></script>
+
+    <!-- sets up user listener and check -->
+    <script type="text/javascript">
+      window.onload = function() {
+        setAuthListener();
+        checkUser();
+      }
+    </script>
+
+    <script type="text/javascript" src="assets/scripts/weather.js"></script>
+    <script type="text/javascript" src="assets/scripts/maps.js"></script>
+    <script type="text/javascript" src="assets/scripts/updatePlace.js"></script>
+    <script type="text/javascript"
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDOQqblS29jCZVxQAUXJV4ZideJhqxnMyc&libraries=places&callback=updateMap"
+    async defer></script>
+    <script type
+  </body>
+</html>
